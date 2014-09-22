@@ -28,11 +28,21 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 # More scoring examples are given in the tests below:
 #
 # Your goal is to write the score method.
+
 def score(dice)
-  if dice.length == 0 then
-    return 0
-  end
-    # You need to write this method
+  return 0 if dice == nil
+
+  score  = 0
+  rolls = [0, 0, 0, 0, 0, 0]
+  dice.each { |roll| rolls[roll-1] += 1 if (1..6) === roll }
+
+  (1..6).each { |roll| score += (roll == 1) ? 1000 : roll * 100 if rolls[roll-1] >= 3 }
+
+  # Score the rest
+  score += rolls[0] % 3 * 100
+  score += rolls[4] % 3 * 50
+
+  return score
 end
 
 class AboutScoringProject < Neo::Koan
